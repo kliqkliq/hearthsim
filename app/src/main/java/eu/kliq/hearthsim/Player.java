@@ -37,36 +37,12 @@ public class Player {
         mHero.onNextTurn();
     }
 
-    public void addCard(Class<? extends BaseCard> cardClass) {
-        try {
-            final BaseCard card = cardClass.getConstructor(Game.class).newInstance(mGame);
-            mDeckCards.push(card);
-
-        } catch (NoSuchMethodException e) {
-            e.printStackTrace();
-        } catch (IllegalAccessException e) {
-            e.printStackTrace();
-        } catch (InstantiationException e) {
-            e.printStackTrace();
-        } catch (InvocationTargetException e) {
-            e.printStackTrace();
-        }
+    public void addCard(BaseCard card) {
+        mDeckCards.push(card);
     }
 
-    public void addMinion(Class<? extends BaseMinion> minionClass) {
-        try {
-            final BaseMinion minion = minionClass.getConstructor(Game.class).newInstance(mGame);
-            mMinions.add(minion);
-
-        } catch (NoSuchMethodException e) {
-            e.printStackTrace();
-        } catch (IllegalAccessException e) {
-            e.printStackTrace();
-        } catch (InstantiationException e) {
-            e.printStackTrace();
-        } catch (InvocationTargetException e) {
-            e.printStackTrace();
-        }
+    public void addMinion(String id) {
+        mMinions.add((BaseMinion) mGame.getCard(id));
     }
 
     public void drawCards(int number) {

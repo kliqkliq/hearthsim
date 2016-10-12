@@ -4,16 +4,14 @@ import eu.kliq.hearthsim.Game;
 import eu.kliq.hearthsim.Player;
 import eu.kliq.hearthsim.card.minion.BaseMinion;
 
-public class MirrorImageMinion extends BaseMinion {
-    public static final int COST = 0;
+public class CS2_141 extends BaseMinion {
 
-    public MirrorImageMinion(Game game) {
+    public CS2_141(Game game) {
         super(game);
-        setCost(COST);
-        setTaunt(true);
     }
 
     @Override
     public void doBattlecry(Player player, int position) {
+        player.doDamage(position, 1);
     }
 }

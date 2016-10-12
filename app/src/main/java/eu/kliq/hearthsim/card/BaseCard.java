@@ -8,11 +8,11 @@ public abstract class BaseCard {
     int mBaseCost;
     int mTurnCost;
 
-    protected BaseCard(Game game) {
+    public BaseCard(Game game) {
         mGame = game;
     }
 
-    protected void setCost(int value) {
+    public void setCost(int value) {
         mBaseCost = value;
         mTurnCost = value;
     }

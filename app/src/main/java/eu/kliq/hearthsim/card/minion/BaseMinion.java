@@ -4,7 +4,7 @@ import eu.kliq.hearthsim.Game;
 import eu.kliq.hearthsim.Player;
 import eu.kliq.hearthsim.card.BaseCard;
 
-public abstract class BaseMinion extends BaseCard {
+public class BaseMinion extends BaseCard {
     private int mBaseHealth;
     private int mBaseAttack;
     private int mCurrentHealth;
@@ -12,7 +12,7 @@ public abstract class BaseMinion extends BaseCard {
     private boolean mIsTaunt;
     private boolean mIsCharge;
 
-    protected BaseMinion(Game game) {
+    public BaseMinion(Game game) {
         super(game);
     }
 
@@ -20,7 +20,7 @@ public abstract class BaseMinion extends BaseCard {
         return mBaseHealth;
     }
 
-    protected void setHealth(int value) {
+    public void setHealth(int value) {
         mBaseHealth = value;
         mCurrentHealth = value;
     }
@@ -33,7 +33,7 @@ public abstract class BaseMinion extends BaseCard {
         return mBaseAttack;
     }
 
-    protected void setAttack(int value) {
+    public void setAttack(int value) {
         mBaseAttack = value;
         mTurnAttack = value;
     }
@@ -46,7 +46,7 @@ public abstract class BaseMinion extends BaseCard {
         return mIsTaunt;
     }
 
-    protected void setTaunt(boolean isTaunt) {
+    public void setTaunt(boolean isTaunt) {
         mIsTaunt = isTaunt;
     }
 
@@ -54,11 +54,12 @@ public abstract class BaseMinion extends BaseCard {
         return mIsCharge;
     }
 
-    protected void setCharge(boolean isCharge) {
+    public void setCharge(boolean isCharge) {
         mIsCharge = isCharge;
     }
 
-    protected abstract void doBattlecry(Player player, int position);
+    public void doBattlecry(Player player, int position) {
+    }
 
     public void onDamage(int damage) {
         mCurrentHealth -= damage;

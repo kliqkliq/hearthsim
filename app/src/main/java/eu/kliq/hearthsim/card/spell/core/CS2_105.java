@@ -4,12 +4,10 @@ import eu.kliq.hearthsim.Game;
 import eu.kliq.hearthsim.Player;
 import eu.kliq.hearthsim.card.spell.BaseSpell;
 
-public class HeroicStrike extends BaseSpell {
-    public static final int COST = 2;
+public class CS2_105 extends BaseSpell {
 
-    public HeroicStrike(Game game) {
+    public CS2_105(Game game) {
         super(game);
-        setCost(COST);
     }
 
     @Override

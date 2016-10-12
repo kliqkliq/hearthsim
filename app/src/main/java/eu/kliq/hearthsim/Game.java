@@ -5,6 +5,7 @@ import java.util.List;
 import java.util.Map;
 
 import eu.kliq.hearthsim.card.BaseCard;
+import eu.kliq.hearthsim.card.minion.BaseMinion;
 import eu.kliq.hearthsim.hero.BaseHero;
 
 public class Game {
@@ -12,6 +13,7 @@ public class Game {
     private PLAYER mCurrentPlayerId;
     private PLAYER mNextPlayerId;
     private int mTurnNumber;
+    private CardDatabase mCardDatabase;
 
     public enum PLAYER {
         ONE, TWO
@@ -19,6 +21,7 @@ public class Game {
 
     public Game() {
         mPlayersMap = new HashMap<>();
+        mCardDatabase = new CardDatabase(this);
     }
 
     public Player getCurrentPlayer() {
@@ -75,8 +78,9 @@ public class Game {
         mPlayersMap.put(id, player);
     }
 
-    public void setCards(PLAYER id, List<Class<? extends BaseCard>> cards) {
-        for (Class<? extends BaseCard> card : cards) {
+    public void setCards(PLAYER id, List<String> cardIds) {
+        for (String cardId : cardIds) {
+            final BaseCard card = mCardDatabase.getCard(cardId);
             mPlayersMap.get(id).addCard(card);
         }
     }
@@ -91,5 +95,9 @@ public class Game {
 
     public void playCard(int cardPosition) {
         getCurrentPlayer().playCard(cardPosition);
+    }
+
+    public BaseCard getCard(String id) {
+        return mCardDatabase.getCard(id);
     }
 }
