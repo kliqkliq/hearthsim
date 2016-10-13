@@ -1,6 +1,5 @@
 package eu.kliq.hearthsim;
 
-import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Stack;
@@ -27,18 +26,25 @@ public class Player {
         mMinions = new ArrayList<>();
         mDeckCards = new Stack();
         mHandCards = new ArrayList<>();
+        mMana = 1;
     }
 
     public void onNextTurn(int turnNumber) {
         mMana = turnNumber + mManaModifier;
+        mManaModifier = 0;
         for (BaseMinion minion : mMinions) {
             minion.onNextTurn();
         }
         mHero.onNextTurn();
+        printBoard();
     }
 
-    public void addCard(BaseCard card) {
+    public void addCardToDeck(BaseCard card) {
         mDeckCards.push(card);
+    }
+
+    public void addCardToHand(BaseCard card) {
+        mHandCards.add(card);
     }
 
     public void addMinion(String id) {
@@ -69,6 +75,14 @@ public class Player {
 
     public void spendMana(int cost) {
         mMana -= cost;
+    }
+
+    public int getMana() {
+        return mMana += mManaModifier;
+    }
+
+    public void addTurnMana(int mana) {
+        mManaModifier += mana;
     }
 
     public void destroyMinion(int position) {
@@ -156,5 +170,19 @@ public class Player {
      */
     private void onHeroAttack(BaseMinion minion) {
         mHero.onAttack(minion.getAttack());
+    }
+
+    private void printBoard() {
+        System.out.println("[" + getHero().getAttack() + "/"  + getHero().getHealth() + " m:"  + getMana() + "] "  + getName() +  " minions:");
+        int i = 0;
+        for (BaseMinion minion : mMinions) {
+            System.out.println("#" + i + " [" + minion.getAttack() + "/"  + minion.getHealth() + "] " + minion.getName());
+            i++;
+        }
+    }
+
+    public String getName() {
+        return mName;
+
     }
 }

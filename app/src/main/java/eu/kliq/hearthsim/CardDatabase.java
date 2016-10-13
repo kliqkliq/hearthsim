@@ -12,6 +12,7 @@ import java.util.Map;
 import eu.kliq.hearthsim.card.BaseCard;
 import eu.kliq.hearthsim.card.minion.BaseMinion;
 import eu.kliq.hearthsim.card.spell.BaseSpell;
+import eu.kliq.hearthsim.card.weapon.BaseWeapon;
 
 public class CardDatabase {
     private Game mGame;
@@ -48,6 +49,8 @@ public class CardDatabase {
                 card = new BaseSpell(mGame);
             } else if (cardType.equals("minion")) {
                 card = new BaseMinion(mGame);
+            } else if (cardType.equals("weapon")) {
+                card = new BaseWeapon(mGame);
             }
         }
 
@@ -66,6 +69,7 @@ public class CardDatabase {
         }
 
         card.setCost(jsonCard.getCost());
+        card.setName(jsonCard.getName());
 
         if (card instanceof BaseMinion) {
             BaseMinion minion = (BaseMinion) card;
@@ -73,6 +77,12 @@ public class CardDatabase {
             minion.setHealth(jsonCard.getHealth());
             minion.setCharge(jsonCard.getMechanics().contains("CHARGE"));
             minion.setTaunt(jsonCard.getMechanics().contains("TAUNT"));
+        }
+
+        if (card instanceof BaseWeapon) {
+            BaseWeapon minion = (BaseWeapon) card;
+            minion.setAttack(jsonCard.getAttack());
+            minion.setDurability(jsonCard.getDurability());
         }
 
         return card;

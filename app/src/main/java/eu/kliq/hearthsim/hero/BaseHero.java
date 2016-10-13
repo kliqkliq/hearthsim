@@ -1,19 +1,22 @@
 package eu.kliq.hearthsim.hero;
 
 import eu.kliq.hearthsim.Player;
+import eu.kliq.hearthsim.card.weapon.BaseWeapon;
 
 public abstract class BaseHero {
     public static final int DEFAULT_ATTACK = 0;
     public static final int DEFAULT_SKILL_DAMAGE = 0;
     public static final int DEFAULT_HEALTH = 30;
 
-    private int baseAttack;
-    private int turnAttack;
-    private int baseHealth;
-    private int currentHealth;
-    private int baseSkillDamage;
-    private int currentSkillDamage;
-    private int armor;
+    private int mBaseAttack;
+    private int mTurnAttack;
+    private int mBaseHealth;
+    private int mCurrentHealth;
+    private int mBaseSkillDamage;
+    private int mCurrentSkillDamage;
+    private int mArmor;
+
+    private BaseWeapon mWeapon;
 
     BaseHero() {
         setAttack(DEFAULT_ATTACK);
@@ -23,54 +26,67 @@ public abstract class BaseHero {
 
     public abstract void onHeroPower(Player player, int position);
     public void addTurnAttack(int value) {
-        turnAttack += value;
+        mTurnAttack += value;
     }
     public void onNextTurn() {
-        turnAttack = baseAttack;
+        mTurnAttack = mBaseAttack;
     }
 
     public int getAttack() {
-        return turnAttack;
+        int finalAttack = mTurnAttack;
+        if (mWeapon != null) {
+            finalAttack += mWeapon.getAttack();
+            mWeapon.onAttack();
+            if (mWeapon.getDurability() == 0) {
+                mWeapon.onDestroy();
+                mWeapon = null;
+            }
+        }
+        return finalAttack;
     }
 
     protected void setAttack(int value) {
-        baseAttack = value;
-        turnAttack = value;
+        mBaseAttack = value;
+        mTurnAttack = value;
     }
 
     public int getHealth() {
-        return currentHealth;
+        return mCurrentHealth;
     }
 
     protected void setHealth(int value) {
-        baseHealth = value;
-        currentHealth = value;
+        mBaseHealth = value;
+        mCurrentHealth = value;
     }
 
     public void onAttack(int attack) {
-        int armorLeft = armor - attack;
+        int armorLeft = mArmor - attack;
         if (armorLeft > 0) {
-            armor = armorLeft;
+            mArmor = armorLeft;
         } else {
-            currentHealth += armorLeft;
-            armor = 0;
+            mCurrentHealth += armorLeft;
+            mArmor = 0;
         }
     }
 
     public int getSkillDamage() {
-        return currentSkillDamage;
+        return mCurrentSkillDamage;
     }
 
     protected void setSkillDamage(int value) {
-        baseSkillDamage = value;
-        currentSkillDamage = value;
+        mBaseSkillDamage = value;
+        mCurrentSkillDamage = value;
     }
 
     public int getArmor() {
-        return armor;
+        return mArmor;
     }
 
     public void addArmor(int value) {
-        armor += value;
+        mArmor += value;
+    }
+
+    public void addWeapon(BaseWeapon weapon) {
+        mWeapon = weapon;
     }
 }

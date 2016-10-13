@@ -5,7 +5,6 @@ import java.util.List;
 import java.util.Map;
 
 import eu.kliq.hearthsim.card.BaseCard;
-import eu.kliq.hearthsim.card.minion.BaseMinion;
 import eu.kliq.hearthsim.hero.BaseHero;
 
 public class Game {
@@ -68,9 +67,14 @@ public class Game {
         PLAYER tempPlayerId = mCurrentPlayerId;
         mCurrentPlayerId = mNextPlayerId;
         mNextPlayerId = tempPlayerId;
+
+        if (mCurrentPlayerId == PLAYER.ONE) {
+            mTurnNumber++;
+        }
+        System.out.println("Starting " + getCurrentPlayer().getName() + " turn (" + mTurnNumber + ")");
+
         getCurrentPlayer().onNextTurn(mTurnNumber);
         getNextPlayer().onNextTurn(mTurnNumber);
-        mTurnNumber++;
     }
 
     public void addPlayer(PLAYER id, String name, BaseHero hero) {
@@ -81,15 +85,17 @@ public class Game {
     public void setCards(PLAYER id, List<String> cardIds) {
         for (String cardId : cardIds) {
             final BaseCard card = mCardDatabase.getCard(cardId);
-            mPlayersMap.get(id).addCard(card);
+            mPlayersMap.get(id).addCardToDeck(card);
         }
     }
 
     public void startGame() {
-        mPlayersMap.get(PLAYER.ONE).drawCards(4);
-        mPlayersMap.get(PLAYER.TWO).drawCards(4);
+        System.out.println("Starting game");
+        mPlayersMap.get(PLAYER.ONE).drawCards(3);
+        mPlayersMap.get(PLAYER.TWO).drawCards(3);
         mCurrentPlayerId = PLAYER.ONE;
         mNextPlayerId = PLAYER.TWO;
+        getNextPlayer().addCardToHand(mCardDatabase.getCard(Cards.THE_COIN));
         mTurnNumber = 1;
     }
 

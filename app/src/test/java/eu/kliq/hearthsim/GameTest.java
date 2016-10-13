@@ -5,14 +5,17 @@ import org.junit.Test;
 import java.util.ArrayList;
 import java.util.List;
 
+import eu.kliq.hearthsim.card.minion.BaseMinion;
 import eu.kliq.hearthsim.hero.*;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
 
 public class GameTest {
-    private static final String PLAYER_1_NAME = "Player1";
-    private static final String PLAYER_2_NAME = "Player2";
+    private static final String PLAYER_1_NAME = "Mage";
+    private static final String PLAYER_2_NAME = "Warrior";
     private Game mGame;
+    private Player player;
 
     @Test
     public void test1() {
@@ -21,27 +24,61 @@ public class GameTest {
         mGame.addPlayer(Game.PLAYER.TWO, PLAYER_2_NAME, new Warrior());
 
         List<String> cards1 = new ArrayList<>();
-        cards1.add("CS2_141"); // Ironforge Rifleman
-        cards1.add("CS2_213"); // Reckless Rocketeer
-        cards1.add("CS2_124"); // Wolfrider
-        cards1.add("CS2_027"); // Mirror image
+        cards1.add(Cards.IRONFORGE_RIFLEMAN);
+        cards1.add(Cards.RECKLESS_ROCKETEER); // 2
+        cards1.add(Cards.WOLFRIDER); // 1
+        cards1.add(Cards.MIRROR_IMAGE_SPELL); // 0
 
         mGame.setCards(Game.PLAYER.ONE, cards1);
 
         List<String> cards2 = new ArrayList<>();
-        cards2.add("CS2_105"); // Heroic Strike
-        cards2.add("CS2_124"); // Wolfrider
-        cards2.add("CS2_141"); // Ironforge Rifleman
-        cards2.add("CS2_213"); // Reckless Rocketeer
+        cards2.add(Cards.HEROIC_STRIKE);
+        cards2.add(Cards.WOLFRIDER);
+        cards2.add(Cards.IRONFORGE_RIFLEMAN);// 2
+        cards2.add(Cards.FIERY_WAR_AXE); // 1
+        cards2.add(Cards.RECKLESS_ROCKETEER); // 0
 
         mGame.setCards(Game.PLAYER.TWO, cards2);
 
         mGame.startGame();
 
-        assertEquals(0, mGame.getCurrentPlayer().getMinions().size());
-
+        /**
+         *  Mage turn 1
+         */
+        player = mGame.getCurrentPlayer();
+        assertEquals(0, player.getMinions().size());
+        assertEquals(1, player.getMana());
+        // Cast Mirror Image spell
         mGame.playCard(0);
+        assertEquals(0, player.getMana());
+        assertEquals(2, player.getMinions().size());
+        BaseMinion minion = player.getMinions().get(0);
+        assertEquals(0, minion.getAttack());
+        assertEquals(2, minion.getHealth());
+        assertTrue(minion.isTaunt());
 
-        assertEquals(2, mGame.getCurrentPlayer().getMinions().size());
+        /**
+         *  Warrior turn 1
+         */
+        mGame.nextTurn();
+        player = mGame.getCurrentPlayer();
+        assertEquals(0, player.getMinions().size());
+        assertEquals(1, player.getMana());
+        // Cast The Coin spell
+        mGame.playCard(3);
+        assertEquals(2, player.getMana());
+        // Play Fiery War Axe
+        mGame.playCard(1);
+        // Attack Mirror image minion
+        mGame.attackMinion(1);
+
+        /**
+         *  Mage turn 2
+         */
+        mGame.nextTurn();
+        player = mGame.getCurrentPlayer();
+        assertEquals(1, player.getMinions().size());
+        assertEquals(2, player.getMana());
+
     }
 }

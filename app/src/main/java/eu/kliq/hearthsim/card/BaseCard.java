@@ -5,8 +5,9 @@ import eu.kliq.hearthsim.Player;
 
 public abstract class BaseCard {
     protected Game mGame;
-    int mBaseCost;
-    int mTurnCost;
+    private int mBaseCost;
+    private int mTurnCost;
+    private String mName;
 
     public BaseCard(Game game) {
         mGame = game;
@@ -25,11 +26,20 @@ public abstract class BaseCard {
         return mTurnCost;
     }
 
+    public String getName() {
+        return mName;
+    }
+
+    public void setName(String mName) {
+        this.mName = mName;
+    }
+
     public void onNextTurn() {
         mTurnCost = mBaseCost;
     }
 
     public void onPlay(Player player, int position) {
+        System.out.println("Playing (" + getCost() + ")" +  getName());
         mGame.getCurrentPlayer().spendMana(getCost());
     }
 }

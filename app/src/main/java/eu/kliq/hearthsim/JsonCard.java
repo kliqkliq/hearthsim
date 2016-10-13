@@ -12,6 +12,7 @@ public class JsonCard {
     String text;
     int attack;
     int health;
+    int durability;
 
     List<String> mechanics;
 
@@ -85,6 +86,14 @@ public class JsonCard {
 
     public void setHealth(int health) {
         this.health = health;
+    }
+
+    public int getDurability() {
+        return durability;
+    }
+
+    public void setDurability(int durability) {
+        this.durability = durability;
     }
 
     public List<String> getMechanics() {
