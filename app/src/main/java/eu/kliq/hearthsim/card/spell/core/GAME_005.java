@@ -13,6 +13,6 @@ public class GAME_005 extends BaseSpell {
     @Override
     public void onPlay(Player player, int position) {
         super.onPlay(player, position);
-        mGame.getCurrentPlayer().addTurnMana(1);
+        mGame.getCurrentPlayer().addMana(1);
     }
 }

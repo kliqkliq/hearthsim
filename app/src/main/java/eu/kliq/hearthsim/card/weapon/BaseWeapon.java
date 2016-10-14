@@ -24,11 +24,11 @@ public class BaseWeapon extends BaseCard {
     }
 
     public int getAttack() {
-        return mCurrentDurability;
+        return mCurrentAttack;
     }
 
     public int getBaseDurability() {
-        return mBaseAttack;
+        return mBaseDurability;
     }
 
     public void setDurability(int value) {

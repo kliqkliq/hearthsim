@@ -62,7 +62,11 @@ public class BaseMinion extends BaseCard {
     }
 
     public void onDamage(int damage) {
+        System.out.println(getName() + ": " + damage + " damage received");
         mCurrentHealth -= damage;
+        if (mCurrentHealth <= 0 ) {
+            onDeathRattle();
+        }
     }
 
     @Override
@@ -73,5 +77,10 @@ public class BaseMinion extends BaseCard {
 
     public void onAttack(int attack) {
         onDamage(attack);
+    }
+
+    public void onDeathRattle() {
+        System.out.println(getName() + ": activating death rattle");
+        mGame.onDeathRattle(this);
     }
 }

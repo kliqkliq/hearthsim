@@ -48,10 +48,12 @@ public class GameTest {
         player = mGame.getCurrentPlayer();
         assertEquals(0, player.getMinions().size());
         assertEquals(1, player.getMana());
+        assertEquals(3, player.getHandCards().size());
         // Cast Mirror Image spell
         mGame.playCard(0);
-        assertEquals(0, player.getMana());
         assertEquals(2, player.getMinions().size());
+        assertEquals(0, player.getMana());
+        assertEquals(2, player.getHandCards().size());
         BaseMinion minion = player.getMinions().get(0);
         assertEquals(0, minion.getAttack());
         assertEquals(2, minion.getHealth());
@@ -64,13 +66,18 @@ public class GameTest {
         player = mGame.getCurrentPlayer();
         assertEquals(0, player.getMinions().size());
         assertEquals(1, player.getMana());
+        assertEquals(4, player.getHandCards().size());
         // Cast The Coin spell
         mGame.playCard(3);
         assertEquals(2, player.getMana());
+        assertEquals(3, player.getHandCards().size());
         // Play Fiery War Axe
         mGame.playCard(1);
+        assertEquals(0, player.getMana());
+        assertEquals(2, player.getHandCards().size());
         // Attack Mirror image minion
         mGame.attackMinion(1);
+        assertEquals(1, player.getHero().getWeapon().getDurability());
 
         /**
          *  Mage turn 2
@@ -79,6 +86,17 @@ public class GameTest {
         player = mGame.getCurrentPlayer();
         assertEquals(1, player.getMinions().size());
         assertEquals(2, player.getMana());
+        assertEquals(30, mGame.getNextPlayer().getHero().getHealth());
+        // Use hero power on opponent hero
+        mGame.useHeroPower(mGame.getNextPlayer());
+        assertEquals(0, player.getMana());
+        assertEquals(29, mGame.getNextPlayer().getHero().getHealth());
 
+        /**
+         *  Warrior turn 2
+         */
+        mGame.nextTurn();
+        player = mGame.getCurrentPlayer();
+        assertEquals(2, player.getMana());
     }
 }

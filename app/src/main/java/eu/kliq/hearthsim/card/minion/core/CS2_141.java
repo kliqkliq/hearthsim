@@ -12,6 +12,6 @@ public class CS2_141 extends BaseMinion {
 
     @Override
     public void doBattlecry(Player player, int position) {
-        player.doDamage(position, 1);
+        player.doMinionDamage(position, 1);
     }
 }

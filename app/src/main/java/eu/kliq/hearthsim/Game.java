@@ -5,6 +5,7 @@ import java.util.List;
 import java.util.Map;
 
 import eu.kliq.hearthsim.card.BaseCard;
+import eu.kliq.hearthsim.card.minion.BaseMinion;
 import eu.kliq.hearthsim.hero.BaseHero;
 
 public class Game {
@@ -29,6 +30,15 @@ public class Game {
 
     public Player getNextPlayer() {
         return mPlayersMap.get(mNextPlayerId);
+    }
+
+    /**
+     * Called when minion triggers death rattle
+     * @param minion
+     */
+    public void onDeathRattle(BaseMinion minion) {
+        mPlayersMap.get(mCurrentPlayerId).onDeathRattle(minion);
+        mPlayersMap.get(mNextPlayerId).onDeathRattle(minion);
     }
 
     /**
@@ -61,6 +71,30 @@ public class Game {
      */
     public void attackHero(int attackerPosition) {
         getCurrentPlayer().attackHero(attackerPosition, getNextPlayer());
+    }
+
+    /**
+     * Hero use power
+     */
+    public void useHeroPower() {
+        getCurrentPlayer().useHeroPower(null, null);
+    }
+
+    /**
+     * Hero use power on hero
+     * @param player
+     */
+    public void useHeroPower(Player player) {
+        getCurrentPlayer().useHeroPower(player, null);
+    }
+
+    /**
+     * Hero use power on minion
+     * @param player
+     * @param position
+     */
+    public void useHeroPower(Player player, Integer position) {
+        getCurrentPlayer().useHeroPower(player, position);
     }
 
     public void nextTurn() {

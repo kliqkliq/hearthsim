@@ -10,7 +10,12 @@ public class Mage extends BaseHero {
     }
 
     @Override
-    public void onHeroPower(Player player, int position) {
-        player.doDamage(position, getSkillDamage());
+    public void onHeroPower(Player player, Integer position) {
+        super.onHeroPower(player, position);
+        if (position == null) {
+            player.doHeroDamage(getSkillDamage());
+        } else {
+            player.doMinionDamage(position, getSkillDamage());
+        }
     }
 }

@@ -15,7 +15,6 @@ public abstract class BaseHero {
     private int mBaseSkillDamage;
     private int mCurrentSkillDamage;
     private int mArmor;
-
     private BaseWeapon mWeapon;
 
     BaseHero() {
@@ -24,7 +23,9 @@ public abstract class BaseHero {
         setSkillDamage(DEFAULT_SKILL_DAMAGE);
     }
 
-    public abstract void onHeroPower(Player player, int position);
+    public void onHeroPower(Player player, Integer position) {
+    }
+
     public void addTurnAttack(int value) {
         mTurnAttack += value;
     }
@@ -60,13 +61,7 @@ public abstract class BaseHero {
     }
 
     public void onAttack(int attack) {
-        int armorLeft = mArmor - attack;
-        if (armorLeft > 0) {
-            mArmor = armorLeft;
-        } else {
-            mCurrentHealth += armorLeft;
-            mArmor = 0;
-        }
+        onDamage(attack);
     }
 
     public int getSkillDamage() {
@@ -89,4 +84,18 @@ public abstract class BaseHero {
     public void addWeapon(BaseWeapon weapon) {
         mWeapon = weapon;
     }
+    public BaseWeapon getWeapon() {
+        return mWeapon;
+    }
+
+    public void onDamage(int damage) {
+        int armorLeft = mArmor - damage;
+        if (armorLeft > 0) {
+            mArmor = armorLeft;
+        } else {
+            mCurrentHealth += armorLeft;
+            mArmor = 0;
+        }
+    }
 }
+

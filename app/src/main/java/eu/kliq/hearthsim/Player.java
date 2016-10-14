@@ -10,8 +10,8 @@ import eu.kliq.hearthsim.hero.BaseHero;
 
 public class Player {
     private int mMana;
-    private int mMaxMana;
-    private int mManaModifier;
+    private int mManaGameModifier;
+    private int mManaTurnModifier;
     private Game mGame;
     private List<BaseMinion> mMinions;
     private Stack<BaseCard> mDeckCards;
@@ -30,8 +30,8 @@ public class Player {
     }
 
     public void onNextTurn(int turnNumber) {
-        mMana = turnNumber + mManaModifier;
-        mManaModifier = 0;
+        mMana = turnNumber + mManaTurnModifier;
+        mManaTurnModifier = 0;
         for (BaseMinion minion : mMinions) {
             minion.onNextTurn();
         }
@@ -47,6 +47,10 @@ public class Player {
         mHandCards.add(card);
     }
 
+    public List<BaseCard> getHandCards() {
+        return mHandCards;
+    }
+
     public void addMinion(String id) {
         mMinions.add((BaseMinion) mGame.getCard(id));
     }
@@ -59,6 +63,7 @@ public class Player {
 
     public void playCard(int cardPosition) {
         mHandCards.get(cardPosition).onPlay(null, 0);
+        mHandCards.remove(cardPosition);
     }
 
     public List<BaseMinion> getMinions() {
@@ -78,24 +83,38 @@ public class Player {
     }
 
     public int getMana() {
-        return mMana += mManaModifier;
+        return mMana;
     }
 
-    public void addTurnMana(int mana) {
-        mManaModifier += mana;
+    public void addMana(int mana) {
+        mMana += mana;
+    }
+
+    public String getName() {
+        return mName;
+
     }
 
     public void destroyMinion(int position) {
-        mMinions.remove(position);
+        mMinions.get(position).onDeathRattle();
     }
 
-    public void doDamage(int position, int damage) {
+    public void doMinionDamage(int position, int damage) {
         mMinions.get(position).onDamage(damage);
+    }
+
+    public void doHeroDamage(int damage) {
+        mHero.onDamage(damage);
     }
 
     public void doSpellDamage(int position, int damage) {
         int finalDamage = damage; // LOOP mMinions for spell damage
         mMinions.get(position).onDamage(finalDamage);
+    }
+
+    public void useHeroPower(Player player, Integer position) {
+        mHero.onHeroPower(player, position);
+        spendMana(2);
     }
 
     /**
@@ -181,8 +200,9 @@ public class Player {
         }
     }
 
-    public String getName() {
-        return mName;
-
+    public void onDeathRattle(BaseMinion minion) {
+        if (mMinions.contains(minion)) {
+            mMinions.remove(minion);
+        }
     }
 }
